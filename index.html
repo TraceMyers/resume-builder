@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2>Resume Builder</h2>
+      </div>
+      <nav class="sidebar-tabs">
+        <button class="tab-btn active" data-tab="summary">About Me</button>
+        <button class="tab-btn" data-tab="jobs">Jobs</button>
+        <button class="tab-btn" data-tab="skills">Skills</button>
+        <button class="tab-btn" data-tab="education">Education</button>
+        <button class="tab-btn" data-tab="style">Style</button>
+        <button class="tab-btn" data-tab="file">File</button>
+      </nav>
+
+      <!-- Summary Tab -->
+      <div class="tab-panel active" id="tab-summary">
+        <button class="btn btn-primary" id="btn-new-summary">+ New Paragraph</button>
+        <div id="summary-form" class="edit-form" style="display:none;">
+          <input type="text" id="summary-label" placeholder="Label (e.g. Frontend Focus)">
+          <textarea id="summary-text" placeholder="Paragraph text..." rows="4"></textarea>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="btn-save-summary">Save</button>
+            <button class="btn" id="btn-cancel-summary">Cancel</button>
+          </div>
+        </div>
+        <div id="summary-list" class="item-list"></div>
+      </div>
+
+      <!-- Jobs Tab -->
+      <div class="tab-panel" id="tab-jobs">
+        <button class="btn btn-primary" id="btn-new-job">+ New Job</button>
+        <div id="job-form" class="edit-form" style="display:none;">
+          <input type="text" id="job-title" placeholder="Job Title">
+          <input type="text" id="job-company" placeholder="Company">
+          <div class="date-row">
+            <select id="job-start-month"></select>
+            <input type="number" id="job-start-year" placeholder="Start Year" min="1970" max="2099">
+          </div>
+          <div class="date-row">
+            <select id="job-end-month"></select>
+            <input type="number" id="job-end-year" placeholder="End Year" min="1970" max="2099">
+            <label class="checkbox-label"><input type="checkbox" id="job-current"> Current</label>
+          </div>
+          <div id="bullet-editor">
+            <h4>Bullet Points</h4>
+            <div id="bullet-list-edit"></div>
+            <div class="bullet-add-row">
+              <input type="text" id="new-bullet-text" placeholder="Add bullet point...">
+              <button class="btn" id="btn-add-bullet">+</button>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="btn-save-job">Save Job</button>
+            <button class="btn" id="btn-cancel-job">Cancel</button>
+          </div>
+        </div>
+        <!-- Bullet selection panel for placed jobs -->
+        <div id="bullet-selection-panel" style="display:none;">
+          <h4 id="bullet-panel-title">Bullet Points</h4>
+          <p class="hint">Check to show on resume. Drag to reorder.</p>
+          <div id="bullet-selection-list"></div>
+          <button class="btn" id="btn-close-bullet-panel">Close</button>
+        </div>
+        <div id="job-list" class="item-list"></div>
+      </div>
+
+      <!-- Skills Tab -->
+      <div class="tab-panel" id="tab-skills">
+        <div class="skill-add-row">
+          <input type="text" id="new-skill-name" placeholder="Add skill...">
+          <button class="btn" id="btn-add-skill">+</button>
+        </div>
+        <div id="skill-list" class="item-list"></div>
+      </div>
+
+      <!-- Education Tab -->
+      <div class="tab-panel" id="tab-education">
+        <button class="btn btn-primary" id="btn-new-education">+ Add Education</button>
+        <div id="education-form" class="edit-form" style="display:none;">
+          <input type="text" id="edu-degree" placeholder="Degree (e.g. B.S. Computer Science)">
+          <input type="text" id="edu-school" placeholder="School Name">
+          <input type="text" id="edu-year" placeholder="Year (e.g. 2020)">
+          <input type="text" id="edu-gpa" placeholder="GPA (e.g. 3.85) — optional">
+          <div class="form-actions">
+            <button class="btn btn-primary" id="btn-save-education">Save</button>
+            <button class="btn" id="btn-cancel-education">Cancel</button>
+          </div>
+        </div>
+        <div id="education-list" class="item-list"></div>
+      </div>
+
+      <!-- Style Tab -->
+      <div class="tab-panel" id="tab-style">
+        <h3 class="style-tab-title">Resume Style</h3>
+        <div id="style-grid" class="style-grid"></div>
+      </div>
+
+      <!-- File Tab -->
+      <div class="tab-panel" id="tab-file">
+        <button class="btn btn-primary" id="btn-save-project">Save Project</button>
+        <button class="btn" id="btn-load-project">Load Project</button>
+        <input type="file" id="file-input" accept=".json" style="display:none;">
+        <button class="btn btn-danger" id="btn-new-project">New Project</button>
+        <hr>
+        <button class="btn btn-primary" id="btn-print" onclick="window.print()">Print / PDF</button>
+      </div>
+    </aside>
+
+    <main id="resume-preview">
+      <div id="resume-page">
+        <!-- Header -->
+        <header id="resume-header">
+          <h1 contenteditable="true" data-field="name" class="editable" data-placeholder="Your Name"></h1>
+          <div class="contact-row">
+            <span contenteditable="true" data-field="email" class="editable" data-placeholder="email@example.com"></span>
+            <span class="separator">|</span>
+            <span contenteditable="true" data-field="phone" class="editable" data-placeholder="(555) 123-4567"></span>
+            <span class="separator">|</span>
+            <span contenteditable="true" data-field="website" class="editable" data-placeholder="yourwebsite.com"></span>
+            <span class="separator">|</span>
+            <span contenteditable="true" data-field="location" class="editable" data-placeholder="City, State"></span>
+          </div>
+        </header>
+
+        <!-- Summary -->
+        <section id="resume-summary" class="resume-section" style="display:none;">
+          <h2 class="section-title">About Me</h2>
+          <p id="summary-content"></p>
+        </section>
+
+        <!-- Experience -->
+        <section id="resume-experience" class="resume-section">
+          <h2 class="section-title">Experience</h2>
+          <div id="experience-drop-zone" class="drop-zone">
+            <p class="drop-placeholder">Drag jobs here from the sidebar</p>
+          </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="resume-skills" class="resume-section" style="display:none;">
+          <h2 class="section-title">Skills</h2>
+          <p id="skills-content"></p>
+        </section>
+
+        <!-- Education -->
+        <section id="resume-education" class="resume-section" style="display:none;">
+          <h2 class="section-title">Education</h2>
+          <div id="education-content"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
